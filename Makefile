@@ -4,7 +4,7 @@ INCLUDE_DIR = include
 OBJ_DIR = obj
 SRC_DIR = src
 
-CFLAGS := -Wall -Wextra -pedantic -I include
+CFLAGS := -g -Wall -Wextra -pedantic -I include
 HDRS :=
 
 EXEC := square_mat

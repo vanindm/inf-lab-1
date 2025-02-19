@@ -8,46 +8,53 @@
 
 struct FieldInfo
 {
-	unsigned int type;
 	size_t size;
 };
+
+struct FieldInfo* GetIntegerFieldInfo();
+struct FieldInfo* GetRealFieldInfo();
+struct FieldInfo* GetComplexFieldInfo();
 
 #endif
 
 #ifndef TYPES
 #define TYPES
 
+void* sum(struct FieldInfo* type, void* a, void *b);
+void* sub(struct FieldInfo* type, void* a, void *b);
+void* product(struct FieldInfo* type, void* a, void *b);
+void* quotient(struct FieldInfo* type, void* a, void *b);
+
 typedef struct Integer {
 	int value;
 } integer_t;
 
-int iSum(int a, int b);
+integer_t* integer(int value);
+integer_t* iSum(integer_t* a, integer_t* b);
+integer_t* iSub(integer_t* a, integer_t* b);
+integer_t* iProduct(integer_t* a, integer_t* b);
+integer_t* iQuotient(integer_t* a, integer_t* b);
 
 typedef struct Real {
-	float value;
+	double value;
 } real_t;
 
-double dSum(double a, double b);
+real_t* real(double value);
+real_t* rSum(real_t* a, real_t* b);
+real_t* rSub(real_t* a, real_t* b);
+real_t* rProduct(real_t* a, real_t* b);
+real_t* rQuotient(real_t* a, real_t* b);
 
 // Тип комплексное число
 typedef struct Complex
 {
-	float Re, Im;
+	double Re, Im;
 } complex_t;
 
-
-struct FieldInfo* GetIntFieldInfo();
-struct FieldInfo* GetDoubleFieldInfo();
-struct FieldInfo* GetComplexFieldInfo();
-
-void* sum(struct FieldInfo* type, void* a, void *b);
-
-complex_t cSum(complex_t* a, complex_t* b);
-
-void* product(struct FieldInfo* type, void* a, void *b);
-
-int iProduct(int a, int b);
-double dProduct(double a, double b);
-complex_t cProduct(complex a, complex b);
+complex_t* complex(double Re, double Im);
+complex_t* cSum(complex_t* a, complex_t* b);
+complex_t* cSub(complex_t* a, complex_t* b);
+complex_t* cProduct(complex_t* a, complex_t* b);
+complex_t* cQuotient(complex_t* a, complex_t* b);
 
 #endif
