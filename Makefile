@@ -1,27 +1,26 @@
 CC := gcc
 
-CFLAGS := -Wall -Wextra -pedantic
-HDRS := square_matrix.h types.h
+INCLUDE_DIR = include
+OBJ_DIR = obj
+SRC_DIR = src
 
-SRCS := square_mat.c types.c
+CFLAGS := -Wall -Wextra -pedantic -I include
+HDRS :=
 
-OBJS := $(SRCS:.c=.o)
-
-EXEC := main
+EXEC := square_mat
+SRC := $(wildcard $(SRC_DIR)/*.c)
+OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all: $(EXEC)
- 
-showfont: showfont.c Makefile
-	$(CC) -o $@ $@.c $(CFLAGS) $(LIBS)
 
-glfont: glfont.c Makefile
-	$(CC) -o $@ $@.c $(CFLAGS) $(LIBS)
+$(EXEC): $(OBJ) 
+	$(CC) -o $@ $^ $(CFLAGS)
 
-$(EXEC): $(OBJS) $(HDRS) Makefile
-	$(CC) -o $@ $(OBJS) $(CFLAGS)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(EXEC) $(OBJS)
+	rm -f $(EXEC) $(OBJ_DIR)/$(OBJS)
 
-.PHONY: all clean
+.PHONY: all clean *
 
