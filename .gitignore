@@ -1,3 +1,6 @@
 # Untracked files
 *.o
 vgcore*
+obj
+obj/*
+matrix

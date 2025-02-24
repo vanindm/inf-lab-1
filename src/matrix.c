@@ -53,7 +53,7 @@ matrix_t* matrixSum(matrix_t* a, matrix_t* b)
 				exit(1);
 			}
 			new_element = sum(new->type, (void *)((char *)a->data + a->n * a->type->size * i + j * a->type->size), (void *)((char *)a->data + a->n * a->type->size * i + j * a->type->size));
-			memcpy((void *)((char *)new->data + new->n * new->type->size * i + j * a->type->size), new, a->type->size);
+			memcpy((void *)((char *)new->data + new->n * new->type->size * i + j * a->type->size), new_element, a->type->size);
 			free(new_element);
 		}
 	}
