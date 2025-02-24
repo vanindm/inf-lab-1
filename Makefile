@@ -7,7 +7,7 @@ SRC_DIR = src
 CFLAGS := -g -Wall -Wextra -pedantic -I include
 HDRS :=
 
-EXEC := square_mat
+EXEC := matrix
 SRC := $(wildcard $(SRC_DIR)/*.c)
 OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
