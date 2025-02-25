@@ -68,7 +68,8 @@ error_t* _throwError(char* message, error_t* base)
     error_t* newError = malloc(sizeof(struct ErrorInfo));
     memcpy(newError, base, sizeof(struct ErrorInfo));
     newError->message = malloc(sizeof(char) * (strlen(message) + strlen(base->message) + 1));
-    newError->message = strcat(base->message, message);
+    newError->message = strcat(newError->message, base->message);
+    newError->message = strcat(newError->message, message);
     return newError;
 }
 
