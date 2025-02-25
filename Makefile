@@ -20,10 +20,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
-	mkdir $(OBJ_DIR)
+	mkdir -p $(OBJ_DIR)
 
 clean:
 	rm -f $(EXEC) $(OBJ_DIR)/$(OBJS)
 
-.PHONY: all clean
+.PHONY: all clean obj
 
