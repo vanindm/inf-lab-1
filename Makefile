@@ -19,6 +19,9 @@ $(EXEC): $(OBJ)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(OBJ_DIR):
+	mkdir $(OBJ_DIR)
+
 clean:
 	rm -f $(EXEC) $(OBJ_DIR)/$(OBJS)
 
