@@ -13,6 +13,7 @@ typedef struct Matrix {
 matrix_t* matrix(unsigned int m, unsigned int n, struct FieldInfo* type, void* data);
 void matrixFree(matrix_t* a);
 void matrixTranspose(matrix_t* a);
+void* matrixGetElement(matrix_t* a, unsigned int i, unsigned int j);
 matrix_t* matrixSum(matrix_t* a, matrix_t* b);
 matrix_t* matrixProduct(matrix_t* a, matrix_t* b);
 matrix_t* matrixLinearCombination(matrix_t* a, unsigned int index, void* alphas, struct FieldInfo* type);

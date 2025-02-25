@@ -57,6 +57,11 @@ void matrixTranspose(matrix_t* a)
     a->data = new_data;
 }
 
+void* matrixGetElement(matrix_t* a, unsigned int i, unsigned int j)
+{
+    return (void *)((char *) a->data + a->n * a->type->size * i + a->type->size * j);
+}
+
 matrix_t* matrixSum(matrix_t* a, matrix_t* b)
 {
     if (a->n != b->n || a->m != b->m) {

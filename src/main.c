@@ -16,7 +16,7 @@ int main()
     {
         for (int j = 0; j < mat1->n; j++)
         {
-            printf("%d ", *(int *)((char *)mat1->data + mat1->n * mat1->type->size * i + j * mat1->type->size));
+            printf("%d ", *((int *) matrixGetElement(mat1, i, j)));
         }
         printf("\n");
     }
@@ -25,7 +25,7 @@ int main()
     {
         for (int j = 0; j < mat2->n; j++)
         {
-            printf("%d ", *(int *)((char *)mat2->data + mat2->n * mat2->type->size * i + j * mat2->type->size));
+            printf("%d ", *((int *) matrixGetElement(mat2, i, j)));
         }
         printf("\n");
     }
@@ -34,7 +34,7 @@ int main()
     {
         for (int j = 0; j < mat1->n; j++)
         {
-            printf("%d ", *(int *)((char *)sum->data + sum->n * sum->type->size * i + j * sum->type->size));
+            printf("%d ", *((int *) matrixGetElement(sum, i, j)));
         }
         printf("\n");
     }
@@ -44,7 +44,7 @@ int main()
     {
         for (int j = 0; j < mat1->n; j++)
         {
-            printf("%d ", *(int *)((char *)mat1->data + mat1->n * mat1->type->size * i + j * mat1->type->size));
+            printf("%d ", *((int *) matrixGetElement(mat1, i, j)));
         }
         printf("\n");
     }
