@@ -63,7 +63,7 @@ matrix_t* matrixTranspose(matrix_t* a, error_t** error)
         }
     }
 	matrix_t *new = matrix(a->n, a->m, a->type, new_data, error);
-    if (error != 0)
+    if (*error != NULL)
     {
         *error = throwError("при транспонировании", NULL, *error);
     }
