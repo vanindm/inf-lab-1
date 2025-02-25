@@ -119,7 +119,7 @@ matrix_t* matrixSum(matrix_t* a, matrix_t* b, error_t** error)
         for (unsigned int j = 0; j < new->n; ++j) {
             void* newElement;
             newElement = sum(new->type, (void*)((char*)a->data + a->n * a->type->size * i + j * a->type->size), (void*)((char*)b->data + b->n * b->type->size * i + j * b->type->size), error);
-            if (error != NULL)
+            if (*error != NULL)
             {
                 *error = throwError("при сложении", NULL, *error);
                 return NULL;
@@ -131,7 +131,7 @@ matrix_t* matrixSum(matrix_t* a, matrix_t* b, error_t** error)
             free(newElement);
         }
     }
-    if (error != NULL)
+    if (*error != NULL)
     {
         *error = throwError("при сложении", NULL, *error);
         return NULL;
@@ -151,7 +151,7 @@ matrix_t* matrixProduct(matrix_t* a, matrix_t* b, error_t** error)
         return NULL;
     }
 	matrix_t *newProduct = matrix(a->m, b->n, a->type, NULL, error);
-    if (error != NULL)
+    if (*error != NULL)
     {
         *error = throwError("при умножении", NULL, *error);
         return NULL;
@@ -173,13 +173,13 @@ matrix_t* matrixProduct(matrix_t* a, matrix_t* b, error_t** error)
 			void *tmpSumElement;
 			for (unsigned int k = 0; k < a->n; ++k) {
 				tmpElement = product(a->type, (void *)((char *) a->data + a->type->size * a->n * i + a->type->size * k), (void *)((char *) b->data + b->type->size * b->n * k + b->type->size * j), error);
-                if (error != NULL)
+                if (*error != NULL)
                 {
                     *error = throwError("при умножении", NULL, *error);
                     return NULL;
                 }
 				tmpSumElement = sum(a->type, newElement, tmpElement, error);
-                if (error != NULL)
+                if (*error != NULL)
                 {
                     *error = throwError("при умножении", NULL, *error);
                     return NULL;
@@ -189,7 +189,7 @@ matrix_t* matrixProduct(matrix_t* a, matrix_t* b, error_t** error)
 				newElement = tmpSumElement;
 			}
 			matrixSetElement(newProduct, i, j, newElement, error);
-            if (error != NULL)
+            if (*error != NULL)
             {
                 *error = throwError("при умножении", NULL, *error);
                 return NULL;
