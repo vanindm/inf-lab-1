@@ -48,9 +48,20 @@ int main()
         }
         printf("\n");
     }
+    matrix_t* prod = matrixProduct(mat2, mat1);
+	printf("Mat2 * (Mat1)^T :\n");
+    for (int i = 0; i < prod->m; i++)
+    {
+        for (int j = 0; j < prod->n; j++)
+        {
+            printf("%d ", *((int *) matrixGetElement(prod, i, j)));
+        }
+        printf("\n");
+    }
     matrixFree(mat1);
     matrixFree(mat2);
     matrixFree(sum);
+    matrixFree(prod);
     FreeFieldInfo();
     return 0;
 }
