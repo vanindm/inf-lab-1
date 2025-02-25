@@ -1,12 +1,12 @@
 #include <stdlib.h>
 #include <types.h>
 
-struct FieldInfo* INT_FIELD_INFO;
-struct FieldInfo* REAL_FIELD_INFO;
-struct FieldInfo* COMPLEX_FIELD_INFO;
+struct FieldInfo* INT_FIELD_INFO = NULL;
+struct FieldInfo* REAL_FIELD_INFO = NULL;
+struct FieldInfo* COMPLEX_FIELD_INFO = NULL;
 unsigned int N_FIELD_INFO = 0;
 
-struct FieldInfo* GetIntegerFieldInfo()
+struct FieldInfo* getIntegerFieldInfo()
 {
     if (INT_FIELD_INFO == NULL) {
         INT_FIELD_INFO = malloc(sizeof(struct FieldInfo));
@@ -15,7 +15,7 @@ struct FieldInfo* GetIntegerFieldInfo()
     return INT_FIELD_INFO;
 }
 
-struct FieldInfo* GetRealFieldInfo()
+struct FieldInfo* getRealFieldInfo()
 {
     if (REAL_FIELD_INFO == NULL) {
         REAL_FIELD_INFO = malloc(sizeof(struct FieldInfo));
@@ -24,7 +24,7 @@ struct FieldInfo* GetRealFieldInfo()
     return REAL_FIELD_INFO;
 }
 
-struct FieldInfo* GetComplexFieldInfo()
+struct FieldInfo* getComplexFieldInfo()
 {
     if (COMPLEX_FIELD_INFO == NULL) {
         COMPLEX_FIELD_INFO = malloc(sizeof(struct FieldInfo));
@@ -33,7 +33,7 @@ struct FieldInfo* GetComplexFieldInfo()
     return COMPLEX_FIELD_INFO;
 }
 
-void FreeFieldInfo()
+void freeFieldInfo()
 {
     if (INT_FIELD_INFO != NULL)
         free(INT_FIELD_INFO);
@@ -43,77 +43,77 @@ void FreeFieldInfo()
         free(COMPLEX_FIELD_INFO);
 }
 
-integer_t* integer(int value)
+integer_t* integer(int value, error_t* error)
 {
     integer_t* new = malloc(sizeof(integer_t));
     new->value = value;
     return new;
 }
 
-integer_t* iSum(integer_t* a, integer_t* b)
+integer_t* iSum(integer_t* a, integer_t* b, error_t* error)
 {
     integer_t* pNew = malloc(sizeof(integer_t));
     pNew->value = a->value + b->value;
     return pNew;
 }
 
-integer_t* iSub(integer_t* a, integer_t* b)
+integer_t* iSub(integer_t* a, integer_t* b, error_t* error)
 {
     integer_t* new = malloc(sizeof(integer_t));
     new->value = a->value - b->value;
     return new;
 }
 
-integer_t* iProduct(integer_t* a, integer_t* b)
+integer_t* iProduct(integer_t* a, integer_t* b, error_t* error)
 {
     integer_t* new = malloc(sizeof(integer_t));
     new->value = a->value * b->value;
     return new;
 }
 
-integer_t* iQuotient(integer_t* a, integer_t* b)
+integer_t* iQuotient(integer_t* a, integer_t* b, error_t* error)
 {
     integer_t* new = malloc(sizeof(integer_t));
     new->value = a->value / b->value;
     return new;
 }
 
-real_t* real(double value)
+real_t* real(double value, error_t* error)
 {
     real_t* new = malloc(sizeof(real_t));
     new->value = value;
     return new;
 }
 
-real_t* rSum(real_t* a, real_t* b)
+real_t* rSum(real_t* a, real_t* b, error_t* error)
 {
     real_t* new = malloc(sizeof(real_t));
     new->value = a->value + b->value;
     return new;
 }
 
-real_t* rSub(real_t* a, real_t* b)
+real_t* rSub(real_t* a, real_t* b, error_t* error)
 {
     real_t* new = malloc(sizeof(real_t));
     new->value = a->value - b->value;
     return new;
 }
 
-real_t* rProduct(real_t* a, real_t* b)
+real_t* rProduct(real_t* a, real_t* b, error_t* error)
 {
     real_t* new = malloc(sizeof(real_t));
     new->value = a->value * b->value;
     return new;
 }
 
-real_t* rQuotient(real_t* a, real_t* b)
+real_t* rQuotient(real_t* a, real_t* b, error_t* error)
 {
     real_t* new = malloc(sizeof(real_t));
     new->value = a->value / b->value;
     return new;
 }
 
-complex_t* complex(double Re, double Im)
+complex_t* complex(double Re, double Im, error_t* error)
 {
     complex_t* new = malloc(sizeof(complex_t));
     new->Re = Re;
@@ -121,7 +121,7 @@ complex_t* complex(double Re, double Im)
     return new;
 }
 
-complex_t* cSum(complex_t* a, complex_t* b)
+complex_t* cSum(complex_t* a, complex_t* b, error_t* error)
 {
     complex_t* new = malloc(sizeof(complex_t));
     new->Re = a->Re + b->Re;
@@ -129,7 +129,7 @@ complex_t* cSum(complex_t* a, complex_t* b)
     return new;
 }
 
-complex_t* cSub(complex_t* a, complex_t* b)
+complex_t* cSub(complex_t* a, complex_t* b, error_t* error)
 {
     complex_t* new = malloc(sizeof(complex_t));
     new->Re = a->Re - b->Re;
@@ -137,7 +137,7 @@ complex_t* cSub(complex_t* a, complex_t* b)
     return new;
 }
 
-complex_t* cProduct(complex_t* a, complex_t* b)
+complex_t* cProduct(complex_t* a, complex_t* b, error_t* error)
 {
     complex_t* new = malloc(sizeof(complex_t));
     new->Re = a->Re * b->Re - a->Im * b->Im;
@@ -145,7 +145,7 @@ complex_t* cProduct(complex_t* a, complex_t* b)
     return new;
 }
 
-complex_t* cQuotient(complex_t* a, complex_t* b)
+complex_t* cQuotient(complex_t* a, complex_t* b, error_t* error)
 {
     complex_t* new = malloc(sizeof(complex_t));
     complex_t inverse;
@@ -156,7 +156,7 @@ complex_t* cQuotient(complex_t* a, complex_t* b)
     return new;
 }
 
-void* sum(struct FieldInfo* type, void* a, void* b)
+void* sum(struct FieldInfo* type, void* a, void* b, error_t* error)
 {
     void* new;
     if (type == GetIntegerFieldInfo()) {
@@ -169,7 +169,7 @@ void* sum(struct FieldInfo* type, void* a, void* b)
     return new;
 }
 
-void* sub(struct FieldInfo* type, void* a, void* b)
+void* sub(struct FieldInfo* type, void* a, void* b, error_t* error)
 {
     void* new;
     if (type == GetIntegerFieldInfo()) {
@@ -182,7 +182,7 @@ void* sub(struct FieldInfo* type, void* a, void* b)
     return new;
 }
 
-void* product(struct FieldInfo* type, void* a, void* b)
+void* product(struct FieldInfo* type, void* a, void* b, error_t* error)
 {
     void* new;
     if (type == GetIntegerFieldInfo()) {
@@ -195,7 +195,7 @@ void* product(struct FieldInfo* type, void* a, void* b)
     return new;
 }
 
-void* quotient(struct FieldInfo* type, void* a, void* b)
+void* quotient(struct FieldInfo* type, void* a, void* b, error_t* error)
 {
     void* new;
     if (type == GetIntegerFieldInfo()) {

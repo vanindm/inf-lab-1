@@ -38,13 +38,13 @@ int main()
         }
         printf("\n");
     }
-    matrixTranspose(mat1);
+    matrix_t* mat1T = matrixTranspose(mat1);
     printf("(Mat1)^T:\n");
-    for (int i = 0; i < mat1->m; i++)
+    for (int i = 0; i < mat1T->m; i++)
     {
-        for (int j = 0; j < mat1->n; j++)
+        for (int j = 0; j < mat1T->n; j++)
         {
-            printf("%d ", *((int *) matrixGetElement(mat1, i, j)));
+            printf("%d ", *((int *) matrixGetElement(mat1T, i, j)));
         }
         printf("\n");
     }

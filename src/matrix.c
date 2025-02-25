@@ -11,16 +11,14 @@ matrix_t* matrix(unsigned int m, unsigned int n, struct FieldInfo* type, void* d
 {
     matrix_t* new = malloc(sizeof(matrix_t));
     if (!new) {
-        fprintf(stderr, "Ошибка выделения памяти: %lu байт не было выделено.\n", sizeof(matrix_t));
-        exit(1);
+		return NULL;
     }
     new->m = m;
     new->n = n;
     new->type = type;
     new->data = malloc(new->type->size * new->n * new->m);
     if (!new->data) {
-        fprintf(stderr, "Ошибка выделения памяти: %lu байт не было выделено.\n", (new->type->size * new->n * new->m));
-        exit(1);
+		return NULL;
     }
 	if (data == NULL)
 	{
@@ -31,8 +29,7 @@ matrix_t* matrix(unsigned int m, unsigned int n, struct FieldInfo* type, void* d
 	} else {
 		if (!memcpy(new->data, data, new->type->size * new->n * new->m))
 		{
-			fprintf(stderr, "Ошибка копирования: данные не были скопированы.\n");
-			exit(1);
+			return NULL;
 		}
 	}
     return new;
@@ -44,27 +41,23 @@ void matrixFree(matrix_t* a)
     free(a);
 }
 
-void matrixTranspose(matrix_t* a)
+matrix_t* matrixTranspose(matrix_t* a)
 {
     void* new_data = malloc(a->type->size * a->n * a->m);
     if (!new_data) {
-        fprintf(stderr, "Ошибка выделения памяти: %lu байт не было выделено.\n", (a->type->size * a->n * a->m));
-        exit(1);
+		return NULL;
     }
-    unsigned int tmp = a->n;
-    a->n = a->m;
-    a->m = tmp;
     for (unsigned int i = 0; i < a->m; ++i) {
         for (unsigned int j = 0; j < a->n; ++j) {
-            if(!memcpy((char*)new_data + i * a->n * a->type->size + j * a->type->size, (char*)a->data + j * a->m * a->type->size + i * a->type->size, a->type->size))
+            if(!memcpy((char*)new_data + j * a->m * a->type->size + i * a->type->size, (char*)a->data + i * a->n * a->type->size + j * a->type->size, a->type->size))
             {
-                fprintf(stderr, "Ошибка копирования: данные не были скопированы.\n");
-                exit(1);
+				return NULL;
             }
         }
     }
-    free(a->data);
-    a->data = new_data;
+	matrix_t *new = matrix(a->n, a->m, a->type, new_data);
+	free(new_data);
+	return new;
 }
 
 void* matrixGetElement(matrix_t* a, unsigned int i, unsigned int j)
@@ -72,9 +65,10 @@ void* matrixGetElement(matrix_t* a, unsigned int i, unsigned int j)
     return (void *)((char *) a->data + a->n * a->type->size * i + a->type->size * j);
 }
 
-void matrixSetElement(matrix_t* a, unsigned int i, unsigned int j, void* new_value)
+void* matrixSetElement(matrix_t* a, unsigned int i, unsigned int j, void* new_value)
 {
-	memcpy((void *)((char *) a->data + a->n * a->type->size * i + a->type->size * j), new_value, a->type->size);
+	void* element = memcpy((void *)((char *) a->data + a->n * a->type->size * i + a->type->size * j), new_value, a->type->size);
+	return element;
 }
 
 matrix_t* matrixSum(matrix_t* a, matrix_t* b)
@@ -102,14 +96,14 @@ matrix_t* matrixSum(matrix_t* a, matrix_t* b)
     }
     for (unsigned int i = 0; i < new->m; ++i) {
         for (unsigned int j = 0; j < new->n; ++j) {
-            void* new_element;
+            void* newElement;
             new_element = sum(new->type, (void*)((char*)a->data + a->n * a->type->size * i + j * a->type->size), (void*)((char*)b->data + b->n * b->type->size * i + j * b->type->size));
             if (!memcpy((void*)((char*)new->data + new->n * new->type->size * i + j * new->type->size), new_element, a->type->size))
             {
                 fprintf(stderr, "Ошибка копирования: данные не были скопированы.\n");
                 exit(1);
             }
-            free(new_element);
+            free(newElement);
         }
     }
     return new;
@@ -130,27 +124,26 @@ matrix_t* matrixProduct(matrix_t* a, matrix_t* b)
 	{
 		for (unsigned int j = 0; j < a->n; ++j)
 		{
-			void *new_element = malloc(a->type->size);
+			void *newElement = malloc(a->type->size);
 			for (size_t i = 0; i < a->type->size; ++i)
 			{
-				*((char *)new_element + i) = 0;
+				*((char *)newElement + i) = 0;
 			}
-			void *tmp_element;
-			void *tmp_sum_element;
-			if (!new_element)
+			void *tmpElement;
+			void *tmpSumElement;
+			if (!newElement)
 			{
-				fprintf(stderr, "Ошибка выделения памяти: %lu байт не было выделено.\n", a->type->size);
-				exit(1);
+				return NULL;
 			}
 			for (unsigned int k = 0; k < a->n; ++k) {
-				tmp_element = product(a->type, (void *)((char *) a->data + a->type->size * a->n * i + a->type->size * k), (void *)((char *) b->data + b->type->size * b->n * k + b->type->size * j));
-				tmp_sum_element = sum(a->type, new_element, tmp_element);
-				free(tmp_element);
-				free(new_element);
-				new_element = tmp_sum_element;
+				tmpElement = product(a->type, (void *)((char *) a->data + a->type->size * a->n * i + a->type->size * k), (void *)((char *) b->data + b->type->size * b->n * k + b->type->size * j));
+				tmpSumElement = sum(a->type, newElement, tmpElement);
+				free(tmpElement);
+				free(newElement);
+				newElement = tmpSumElement;
 			}
-			matrixSetElement(new_product, i, j, new_element);
-			free(new_element);
+			matrixSetElement(newProduct, i, j, newElement);
+			free(newElement);
 		}
 	}
 	return new_product;
