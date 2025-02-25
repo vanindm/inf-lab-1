@@ -66,6 +66,7 @@ int main()
         printf("\n");
     }
     matrixFree(mat1);
+    matrixFree(matT);
     matrixFree(mat2);
     matrixFree(sum);
     matrixFree(prod);
