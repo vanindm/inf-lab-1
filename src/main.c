@@ -54,13 +54,9 @@ int main()
     {
         displayError(error);
         freeError(error);
+        return 1;
     }
 	printf("Mat2 * (Mat1)^T :\n");
-    if (error)
-    {
-        displayError(error);
-        freeError(error);
-    }
     for (int i = 0; i < prod->m; i++)
     {
         for (int j = 0; j < prod->n; j++)

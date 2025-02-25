@@ -56,9 +56,9 @@ void freeErrorInfo()
 
 void freeError(error_t* error)
 {
-    if (!error->innerError)
+    if (error->innerError)
         freeError(error->innerError);
-    if(!error->message)
+    if(error->message)
         free(error->message);
     free(error);
 }
