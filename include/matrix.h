@@ -19,6 +19,6 @@ void* matrixGetElement(matrix_t* a, unsigned int i, unsigned int j, error_t** er
 void* matrixSetElement(matrix_t* a, unsigned int i, unsigned int j, void* new_value, error_t** error);
 matrix_t* matrixSum(matrix_t* a, matrix_t* b, error_t** error);
 matrix_t* matrixProduct(matrix_t* a, matrix_t* b, error_t** error);
-matrix_t* matrixLinearCombination(matrix_t* a, unsigned int index, void* alphas, struct FieldInfo* type, error_t** error);
+matrix_t* matrixLinearCombination(struct FieldInfo* type, matrix_t* a, unsigned int index, void* alphas, error_t** error);
 
 #endif

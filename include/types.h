@@ -15,6 +15,7 @@ struct FieldInfo* getComplexFieldInfo();
 
 void freeFieldInfo();
 
+void* newZero(struct FieldInfo* type, error_t** error);
 void* sum(struct FieldInfo* type, void* a, void* b, error_t** error);
 void* sub(struct FieldInfo* type, void* a, void* b, error_t** error);
 void* product(struct FieldInfo* type, void* a, void* b, error_t** error);

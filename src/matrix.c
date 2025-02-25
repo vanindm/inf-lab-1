@@ -23,13 +23,13 @@ matrix_t* matrix(unsigned int m, unsigned int n, struct FieldInfo* type, void* d
         *error = throwError("невозможно выделить память для matrix_t.data при создании", getMemoryError(), NULL);
 		return NULL;
     }
-    // Поведение по-умолчанию: заполнить матрицу нулями
+    // Поведение по умолчанию: заполнить матрицу нулями
 	if (data == NULL)
 	{
 		for (size_t i = 0; i < new->n * new->m; ++i)
 		{
 			*((char *)new->data) = 0;
-		}
+		} 
 	} else {
 		if (!memcpy(new->data, data, new->type->size * new->n * new->m))
 		{
@@ -121,7 +121,7 @@ matrix_t* matrixSum(matrix_t* a, matrix_t* b, error_t** error)
             newElement = sum(new->type, (void*)((char*)a->data + a->n * a->type->size * i + j * a->type->size), (void*)((char*)b->data + b->n * b->type->size * i + j * b->type->size), error);
             if (*error != NULL)
             {
-                *error = throwError("при сложении", NULL, *error);
+                *error = throwError("при сложении matrix_t", NULL, *error);
                 return NULL;
             }
             if (!memcpy((void*)((char*)new->data + new->n * new->type->size * i + j * new->type->size), newElement, a->type->size))
@@ -133,7 +133,7 @@ matrix_t* matrixSum(matrix_t* a, matrix_t* b, error_t** error)
     }
     if (*error != NULL)
     {
-        *error = throwError("при сложении", NULL, *error);
+        *error = throwError("при сложении matrix_t", NULL, *error);
         return NULL;
     }
     return new;
@@ -153,17 +153,17 @@ matrix_t* matrixProduct(matrix_t* a, matrix_t* b, error_t** error)
 	matrix_t *newProduct = matrix(a->m, b->n, a->type, NULL, error);
     if (*error != NULL)
     {
-        *error = throwError("при умножении", NULL, *error);
+        *error = throwError("при умножении matrix_t", NULL, *error);
         return NULL;
     }
 	for (unsigned int i = 0; i < a->m; ++i)
 	{
-		for (unsigned int j = 0; j < a->n; ++j)
+		for (unsigned int j = 0; j < b->n; ++j)
 		{
 			void *newElement = malloc(a->type->size);
             if (!newElement)
             {
-                *error = throwError("при умножении память под новый элемент не была выделена", getMemoryError(), NULL);
+                *error = throwError("при умножении matrix_t память под новый элемент не была выделена", getMemoryError(), NULL);
             }
 			for (size_t i = 0; i < a->type->size; ++i)
 			{
@@ -171,17 +171,18 @@ matrix_t* matrixProduct(matrix_t* a, matrix_t* b, error_t** error)
 			}
 			void *tmpElement;
 			void *tmpSumElement;
-			for (unsigned int k = 0; k < a->n; ++k) {
+			for (unsigned int k = 0; k < a->n; ++k) 
+            {
 				tmpElement = product(a->type, (void *)((char *) a->data + a->type->size * a->n * i + a->type->size * k), (void *)((char *) b->data + b->type->size * b->n * k + b->type->size * j), error);
                 if (*error != NULL)
                 {
-                    *error = throwError("при умножении", NULL, *error);
+                    *error = throwError("при умножении matrix_t", NULL, *error);
                     return NULL;
                 }
 				tmpSumElement = sum(a->type, newElement, tmpElement, error);
                 if (*error != NULL)
                 {
-                    *error = throwError("при умножении", NULL, *error);
+                    *error = throwError("при умножении matrix_t", NULL, *error);
                     return NULL;
                 }
 				free(tmpElement);
@@ -191,7 +192,7 @@ matrix_t* matrixProduct(matrix_t* a, matrix_t* b, error_t** error)
 			matrixSetElement(newProduct, i, j, newElement, error);
             if (*error != NULL)
             {
-                *error = throwError("при умножении", NULL, *error);
+                *error = throwError("при умножении matrix_t", NULL, *error);
                 return NULL;
             }
 			free(newElement);
@@ -200,6 +201,56 @@ matrix_t* matrixProduct(matrix_t* a, matrix_t* b, error_t** error)
 	return newProduct;
 }
 
-matrix_t* matrixLinearCombination(matrix_t* a, unsigned int index, void* alphas, struct FieldInfo* type, error_t** error)
+matrix_t* matrixLinearCombination(struct FieldInfo* type, matrix_t* a, unsigned int index, void* alphas, error_t** error)
 {
+    matrix_t* new = matrix(a->m, a->n, a->type, a->data, error);
+    if (error)
+    {
+        *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
+        return NULL;
+    }
+    if (type != new->type)
+    {
+        *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t у matrix_t и списка коэффицентов типы данных различаются", getLogicalError(), NULL);
+        return NULL;
+    }
+    for (unsigned int i = 0; i < new->n; ++i) 
+    {
+        void* current = newZero(new->type, error);
+        for (unsigned int j = 0; j < new->m; ++j)
+        {
+            if (j < index)
+            {
+                void* current = sum(new->type, current, product(new->type, matrixGetElement(new, j, i, error), (void *)((char *) alphas + j), error), error);
+                if (error)
+                {
+                    *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
+                    return NULL;
+                }
+            }
+            if (j > index)
+            {
+                void* current = sum(new->type, current, product(new->type, matrixGetElement(new, j, i, error), (void *)((char *) alphas + j - 1), error), error);
+                if (error)
+                {
+                    *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
+                    return NULL;
+                }
+            }
+        }
+        current = sum(new->type, current, matrixGetElement(new, index, i, error), error);
+        if (error)
+        {
+            *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
+            return NULL;
+        }
+        matrixSetElement(new, index, i, alphas, error);
+        if (error)
+        {
+            *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
+            return NULL;
+        }
+        free(current);
+    }
+    return new;
 }

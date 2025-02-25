@@ -232,6 +232,21 @@ complex_t* cQuotient(complex_t* a, complex_t* b, error_t** error)
     return new;
 }
 
+void* newZero(struct FieldInfo* type, error_t** error)
+{
+    void* new = malloc(type->size);
+    if (!new)
+    {
+        *error = throwError("невозможно выделить память для нуля абстрактного типа", getMemoryError(), NULL);
+        return NULL;
+    }
+    for (unsigned int i = 0 ; i < type->size; ++i)
+    {
+        *((char *) new + i) = 0;
+    }
+    return new;
+}
+
 void* sum(struct FieldInfo* type, void* a, void* b, error_t** error)
 {
     void* new;

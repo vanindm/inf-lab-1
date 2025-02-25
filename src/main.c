@@ -49,7 +49,7 @@ int main()
         }
         printf("\n");
     }
-    matrix_t* prod = matrixProduct(mat2, mat1, &error);
+    matrix_t* prod = matrixProduct(mat2, mat1T, &error);
     if (error)
     {
         displayError(error);

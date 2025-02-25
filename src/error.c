@@ -14,7 +14,7 @@ struct ErrorInfo* getLogicalError()
 	{
 		ERROR_LOGICAL = malloc(sizeof(struct ErrorInfo));
 		ERROR_LOGICAL->code = 1;
-		ERROR_LOGICAL->message = strdup("Логическая ошибка: ");
+		ERROR_LOGICAL->message = strdup("логическая ошибка: ");
 		ERROR_LOGICAL->innerError = NULL;
 	}
 	return ERROR_LOGICAL;
@@ -26,7 +26,7 @@ struct ErrorInfo* getMemoryError()
 	{
 		ERROR_MEMORY = malloc(sizeof(struct ErrorInfo));
 		ERROR_MEMORY->code = 2;
-		ERROR_MEMORY->message = strdup("Ошибка памяти: ");
+		ERROR_MEMORY->message = strdup("ошибка памяти: ");
 		ERROR_MEMORY->innerError = NULL;
 	}
 	return ERROR_MEMORY;
@@ -38,7 +38,7 @@ struct ErrorInfo* getArithmeticError()
 	{
 		ERROR_ARITHMETIC = malloc(sizeof(struct ErrorInfo));
 		ERROR_ARITHMETIC->code = 3;
-		ERROR_ARITHMETIC->message = strdup("Арифметическая ошибка: ");
+		ERROR_ARITHMETIC->message = strdup("арифметическая ошибка: ");
 		ERROR_ARITHMETIC->innerError = NULL;
 	}
 	return ERROR_ARITHMETIC;
@@ -90,11 +90,11 @@ error_t* throwError(char* message, error_t* base, error_t* additional)
 
 void displayError(error_t* error)
 {
+    fprintf(stderr, "%s ", error->message);
     if (error->innerError)
     {
         displayError(error->innerError);
     }
-    fprintf(stderr, "%s ", error->message);
     if (!error->innerError)
         fprintf(stderr, ".\n");
 }
