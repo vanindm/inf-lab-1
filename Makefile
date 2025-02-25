@@ -25,5 +25,5 @@ $(OBJ_DIR):
 clean:
 	rm -f $(EXEC) $(OBJ_DIR)/$(OBJS)
 
-.PHONY: all clean *
+.PHONY: all clean
 

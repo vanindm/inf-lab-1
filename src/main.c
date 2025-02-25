@@ -13,6 +13,9 @@ int main()
 	for (int i = 0; i < 9; i++) {
 		printf("%d ", *((int *)sum->data + i));
 	}
+	matrixFree(mat1);
+	matrixFree(mat2);
+	matrixFree(sum);
 	FreeFieldInfo();
 	return 0;
 }

@@ -26,6 +26,12 @@ matrix_t* matrix(unsigned int m, unsigned int n, struct FieldInfo* type, void* d
 	return new;
 }
 
+void matrixFree(matrix_t *a)
+{
+	free(a->data);
+	free(a);
+}
+
 matrix_t* matrixTranspose(matrix_t* a)
 {
 	void* new_data = malloc(a->type->size * a->n * a->m);
