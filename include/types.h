@@ -1,7 +1,4 @@
-#ifndef STD_DEF
-#define STD_DEF
 #include <stddef.h>
-#endif
 
 #ifndef FIELD_INFO
 #define FIELD_INFO
@@ -14,6 +11,8 @@ struct FieldInfo
 struct FieldInfo* GetIntegerFieldInfo();
 struct FieldInfo* GetRealFieldInfo();
 struct FieldInfo* GetComplexFieldInfo();
+
+void FreeFieldInfo();
 
 #endif
 

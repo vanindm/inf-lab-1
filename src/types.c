@@ -36,6 +36,16 @@ struct FieldInfo* GetComplexFieldInfo()
 	return COMPLEX_FIELD_INFO;
 }
 
+void FreeFieldInfo()
+{
+	if (INT_FIELD_INFO != NULL)
+		free(INT_FIELD_INFO);
+	if (REAL_FIELD_INFO != NULL)
+		free(REAL_FIELD_INFO);
+	if (COMPLEX_FIELD_INFO != NULL)
+		free(COMPLEX_FIELD_INFO);
+}
+
 integer_t* integer(int value)
 {
 	integer_t* new = malloc(sizeof(integer_t));

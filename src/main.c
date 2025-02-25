@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <types.h>
 #include <matrix.h>
 
 int main()
@@ -10,7 +11,8 @@ int main()
 	mat2 = matrix(3, 3, GetIntegerFieldInfo(), data2);
 	matrix_t* sum = matrixSum(mat1, mat2);
 	for (int i = 0; i < 9; i++) {
-		printf("%d", *((int *)sum->data + i));
+		printf("%d ", *((int *)sum->data + i));
 	}
+	FreeFieldInfo();
 	return 0;
 }
