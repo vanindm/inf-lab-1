@@ -1,25 +1,14 @@
 #include <error.h>
 
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-struct ErrorInfo* ERROR_NORMAL = null;
-struct ErrorInfo* ERROR_LOGICAL = null;
-struct ErrorInfo* ERROR_MEMORY = null;
-struct ErrorInfo* ERROR_ARITHMETIC = null;
+struct ErrorInfo* ERROR_LOGICAL = NULL;
+struct ErrorInfo* ERROR_MEMORY = NULL;
+struct ErrorInfo* ERROR_ARITHMETIC = NULL;
 
-ErrorInfo* GetNormalError()
-{
-	if (!ERROR_NORMAL)
-	{
-		ERROR_NORMAL = malloc(sizeof(struct ErrorInfo));
-		ERROR_NORMAL->code = 0;
-		ERROR_NORMAL->message = NULL;
-		ERROR_NORMAL->innerError = NULL;
-	}
-	return ERROR_NORMAL;
-}
-
-ErrorInfo* GetLogicalError()
+struct ErrorInfo* getLogicalError()
 {
 	if (!ERROR_LOGICAL)
 	{
@@ -31,7 +20,7 @@ ErrorInfo* GetLogicalError()
 	return ERROR_LOGICAL;
 }
 
-ErrorInfo* GetMemoryError()
+struct ErrorInfo* getMemoryError()
 {
 	if (!ERROR_MEMORY)
 	{
@@ -43,7 +32,7 @@ ErrorInfo* GetMemoryError()
 	return ERROR_MEMORY;
 }
 
-ErrorInfo* GetArithmeticError()
+struct ErrorInfo* getArithmeticError()
 {
 	if (!ERROR_ARITHMETIC)
 	{
@@ -55,14 +44,56 @@ ErrorInfo* GetArithmeticError()
 	return ERROR_ARITHMETIC;
 }
 
-void FreeErrorInfo()
+void freeErrorInfo()
 {
-	if(ERROR_NORMAL)
-		free(ERROR_NORMAL);
 	if(ERROR_LOGICAL)
 		free(ERROR_LOGICAL);
 	if(ERROR_MEMORY)
 		free(ERROR_MEMORY);
 	if(ERROR_ARITHMETIC)
 		free(ERROR_ARITHMETIC);
+}
+
+void freeError(error_t* error)
+{
+    if (!error->innerError)
+        freeError(error->innerError);
+    if(!error->message)
+        free(error->message);
+    free(error);
+}
+
+error_t* _throwError(char* message, error_t* base)
+{
+    error_t* newError = malloc(sizeof(struct ErrorInfo));
+    memcpy(newError, base, sizeof(struct ErrorInfo));
+    newError->message = malloc(sizeof(char) * (strlen(message) + strlen(base->message)));
+    newError->message = strcat(base->message, message);
+    return newError;
+}
+
+error_t* throwError(char* message, error_t* base, error_t* additional)
+{
+    error_t* newError;
+    if (base == NULL && additional != NULL)
+    {
+        newError = malloc(sizeof(struct ErrorInfo));
+        newError->code = additional->code;
+        newError->message = strdup(message);
+    } else if (additional == NULL) {
+        newError = _throwError(message, base);
+    }
+    newError->innerError = additional;
+    return newError;
+}
+
+void displayError(error_t* error)
+{
+    if (error->innerError)
+    {
+        displayError(error->innerError);
+    }
+    fprintf(stderr, "%s ", error->message);
+    if (!error->innerError)
+        fprintf(stderr, ".\n");
 }
