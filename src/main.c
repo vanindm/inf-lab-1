@@ -172,7 +172,6 @@ void testSum()
     matrixFree(mat1);
     matrixFree(mat2);
     matrixFree(matS);
-
 }
 
 void testProduct()

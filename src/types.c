@@ -317,7 +317,7 @@ void* sum(struct FieldInfo* type, void* a, void* b, error_t** error)
         new = (void*)iSum((integer_t*)a, (integer_t*)b, error);
     } else if (type == getRealFieldInfo()) {
         new = (void*)rSum((real_t*)a, (real_t*)b, error);
-    } else if (type == getRealFieldInfo()) {
+    } else if (type == getComplexFieldInfo()) {
         new = (void*)cSum((complex_t*)a, (complex_t*)b, error);
     }
     return new;
@@ -330,7 +330,7 @@ void* sub(struct FieldInfo* type, void* a, void* b, error_t** error)
         new = (void*)iSub((integer_t*)a, (integer_t*)b, error);
     } else if (type == getRealFieldInfo()) {
         new = (void*)rSub((real_t*)a, (real_t*)b, error);
-    } else if (type == getRealFieldInfo()) {
+    } else if (type == getComplexFieldInfo()) {
         new = (void*)cSub((complex_t*)a, (complex_t*)b, error);
     }
     return new;
@@ -343,7 +343,7 @@ void* product(struct FieldInfo* type, void* a, void* b, error_t** error)
         new = (void*)iProduct((integer_t*)a, (integer_t*)b, error);
     } else if (type == getRealFieldInfo()) {
         new = (void*)rProduct((real_t*)a, (real_t*)b, error);
-    } else if (type == getRealFieldInfo()) {
+    } else if (type == getComplexFieldInfo()) {
         new = (void*)cProduct((complex_t*)a, (complex_t*)b, error);
     }
     return new;
@@ -356,7 +356,7 @@ void* quotient(struct FieldInfo* type, void* a, void* b, error_t** error)
         new = (void*)iQuotient((integer_t*)a, (integer_t*)b, error);
     } else if (type == getRealFieldInfo()) {
         new = (void*)rQuotient((real_t*)a, (real_t*)b, error);
-    } else if (type == getRealFieldInfo()) {
+    } else if (type == getComplexFieldInfo()) {
         new = (void*)cQuotient((complex_t*)a, (complex_t*)b, error);
     }
     return new;
