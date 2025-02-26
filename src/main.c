@@ -69,8 +69,8 @@ void testTransposition()
         printf("\n");
     }
     free(data);
-    free(mat);
-    free(matT);
+    matrixFree(mat);
+    matrixFree(matT);
 }
 
 void testSum()
