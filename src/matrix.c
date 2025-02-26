@@ -202,7 +202,7 @@ matrix_t* matrixProduct(matrix_t* a, matrix_t* b, error_t** error)
 matrix_t* matrixLinearCombination(struct FieldInfo* type, matrix_t* a, unsigned int index, void* alphas, error_t** error)
 {
     matrix_t* new = matrix(a->m, a->n, a->type, a->data, error);
-    if (error)
+    if (*error)
     {
         *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
         return NULL;
@@ -220,12 +220,32 @@ matrix_t* matrixLinearCombination(struct FieldInfo* type, matrix_t* a, unsigned 
     for (unsigned int i = 0; i < new->n; ++i) 
     {
         void* current = newZero(new->type, error);
+        if (*error)
+        {
+            *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
+            return NULL;
+        }
         for (unsigned int j = 0; j < new->m; ++j)
         {
             if (j < index)
             {
-                void* current = sum(new->type, current, product(new->type, matrixGetElement(new, j, i, error), (void *)((char *) alphas + j), error), error);
-                if (error)
+                void* currentProduct = product(new->type, matrixGetElement(a, j, i, error), (void *)((char *) alphas + j), error);
+                if (*error)
+                {
+                    *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
+                    return NULL;
+                }
+                void* currentSum = sum(new->type, current, currentProduct, error);
+                if (*error)
+                {
+                    *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
+                    return NULL;
+                }
+                free(current);
+                free(currentProduct);
+                current = currentSum;
+                free(currentSum);
+                if (*error)
                 {
                     *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
                     return NULL;
@@ -233,22 +253,39 @@ matrix_t* matrixLinearCombination(struct FieldInfo* type, matrix_t* a, unsigned 
             }
             if (j > index)
             {
-                void* current = sum(new->type, current, product(new->type, matrixGetElement(new, j, i, error), (void *)((char *) alphas + j - 1), error), error);
-                if (error)
+                void* currentProduct = product(new->type, matrixGetElement(a, j, i, error), (void *)((char *) alphas + j - 1), error);
+                if (*error)
+                {
+                    *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
+                    return NULL;
+                }
+                void* currentSum = sum(new->type, current, currentProduct, error);
+                if (*error)
+                {
+                    *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
+                    return NULL;
+                }
+                free(current);
+                free(currentProduct);
+                current = currentSum;
+                free(currentSum);
+                if (*error)
                 {
                     *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
                     return NULL;
                 }
             }
         }
-        current = sum(new->type, current, matrixGetElement(new, index, i, error), error);
-        if (error)
+        void* tmp = current;
+        current = sum(new->type, current, matrixGetElement(a, index, i, error), error);
+        free(tmp);
+        if (*error)
         {
             *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
             return NULL;
         }
-        matrixSetElement(new, index, i, alphas, error);
-        if (error)
+        matrixSetElement(new, index, i, current, error);
+        if (*error)
         {
             *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
             return NULL;

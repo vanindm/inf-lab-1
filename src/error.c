@@ -101,7 +101,8 @@ error_t* throwError(char* message, error_t* base, error_t* additional)
         newError = malloc(sizeof(struct ErrorInfo));
         newError->code = additional->code;
         newError->message = strdup(message);
-    } else if (additional == NULL) {
+    }
+    if (base != NULL && additional == NULL) {
         newError = _throwError(message, base);
     }
     newError->innerError = additional;
