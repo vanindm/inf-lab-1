@@ -361,7 +361,7 @@ void* quotient(struct FieldInfo* type, void* a, void* b, error_t** error)
     return new;
 }
 
-void* read(struct FieldInfo* type, error_t** error)
+void* readType(struct FieldInfo* type, error_t** error)
 {
     void* new;
     if (type == getIntegerFieldInfo()) {
@@ -374,7 +374,7 @@ void* read(struct FieldInfo* type, error_t** error)
     return new;
 }
 
-void write(struct FieldInfo* type, void* a, error_t** error)
+void writeType(struct FieldInfo* type, void* a, error_t** error)
 {
     if (type == getIntegerFieldInfo()) {
         iWrite((integer_t *)a, error);

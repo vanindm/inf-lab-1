@@ -1,5 +1,3 @@
-#pragma once
-
 #include <matrix.h>
 #include <types.h>
 #include <error.h>

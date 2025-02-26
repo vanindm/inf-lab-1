@@ -1,6 +1,8 @@
 #pragma once
-#include <stddef.h>
+
 #include <error.h>
+
+#include <stddef.h>
 
 #ifndef TYPES_H_
 #define TYPES_H_
@@ -20,8 +22,8 @@ void* sum(struct FieldInfo* type, void* a, void* b, error_t** error);
 void* sub(struct FieldInfo* type, void* a, void* b, error_t** error);
 void* product(struct FieldInfo* type, void* a, void* b, error_t** error);
 void* quotient(struct FieldInfo* type, void* a, void* b, error_t** error);
-void* read(struct FieldInfo* type, error_t** error);
-void  write(struct FieldInfo* type, void* a, error_t** error);
+void* readType(struct FieldInfo* type, error_t** error);
+void  writeType(struct FieldInfo* type, void* a, error_t** error);
 
 typedef struct Integer {
     int value;
