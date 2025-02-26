@@ -234,7 +234,7 @@ matrix_t* matrixLinearCombination(struct FieldInfo* type, matrix_t* a, unsigned 
         {
             if (j < index)
             {
-                void* currentProduct = product(new->type, matrixGetElement(a, j, i, error), (void *)((char *) alphas + j), error);
+                void* currentProduct = product(new->type, matrixGetElement(a, j, i, error), (void *)((char *) alphas + j * type->size), error);
                 if (*error)
                 {
                     *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
@@ -257,7 +257,7 @@ matrix_t* matrixLinearCombination(struct FieldInfo* type, matrix_t* a, unsigned 
             }
             if (j > index)
             {
-                void* currentProduct = product(new->type, matrixGetElement(a, j, i, error), (void *)((char *) alphas + j - 1), error);
+                void* currentProduct = product(new->type, matrixGetElement(a, j, i, error), (void *)((char *) alphas + (j - 1) * type->size), error);
                 if (*error)
                 {
                     *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
