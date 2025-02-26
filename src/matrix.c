@@ -244,7 +244,6 @@ matrix_t* matrixLinearCombination(struct FieldInfo* type, matrix_t* a, unsigned 
                 free(current);
                 free(currentProduct);
                 current = currentSum;
-                free(currentSum);
                 if (*error)
                 {
                     *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
@@ -268,7 +267,6 @@ matrix_t* matrixLinearCombination(struct FieldInfo* type, matrix_t* a, unsigned 
                 free(current);
                 free(currentProduct);
                 current = currentSum;
-                free(currentSum);
                 if (*error)
                 {
                     *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t", NULL, *error);
