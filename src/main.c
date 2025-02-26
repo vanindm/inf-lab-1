@@ -318,7 +318,7 @@ void testLinearCombination()
     scanf("%ud", &row);
     if (!s)
         printf("Введите коэффиценты (через пробел): ");
-    void* alphas = malloc((mat->n - 1) * type->size);
+    void* alphas = malloc((mat->m - 1) * type->size);
     for (unsigned int i = 0; i < mat->m - 1; ++i)
     {
         void* new = readType(type, &error);
