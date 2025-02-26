@@ -360,8 +360,18 @@ void testLinearCombination()
         printf("\n");
     }
     free(data);
+    free(alphas);
     matrixFree(mat);
     matrixFree(matL);
+}
+
+void printUsage()
+{
+    printf("Использование: matrix [ОПЦИИ]\n\
+Получить матрицу(-ы) из стандартного ввода и произвести с ней следующие операции:\n\
+транспонирование (t), сумма (s), произведение (p), прибавить к строке линейную комбинацию других строк (l)\n\n\
+-t\tтип данных (i - integer, r - real, c - complex)\n\
+-o\tоперация\n");
 }
 
 int main(int argc, char **argv)
@@ -369,6 +379,11 @@ int main(int argc, char **argv)
 	char *typeArg = NULL;
 	char *operationArg = NULL;
 	int c;
+    if (argc < 2)
+    {
+        printUsage();
+        return 1;
+    }
 	while((c = getopt(argc, argv, "t:o:s")) != -1)
 	{
 		switch(c)
@@ -393,11 +408,6 @@ int main(int argc, char **argv)
 			default:
 				abort();
 		}
-	}
-	if (typeArg == NULL || operationArg == NULL)
-	{
-		fprintf(stderr, "Опции требуют аргумента!\n");
-		return -1;
 	}
     switch (*typeArg)
     {

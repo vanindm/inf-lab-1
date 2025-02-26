@@ -212,6 +212,11 @@ matrix_t* matrixLinearCombination(struct FieldInfo* type, matrix_t* a, unsigned 
         *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t для количества строк операция не имеет смысла", getLogicalError(), NULL);
         return NULL;
     }
+    if (index >= a->m)
+    {
+        *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t строка index не входит в матрицу", getLogicalError(), NULL);
+        return NULL;
+    }
     if (type != new->type)
     {
         *error = throwError("при попытке прибавить линейную комбинацию строк к строке matrix_t у matrix_t и списка коэффицентов типы данных различаются", getLogicalError(), NULL);
