@@ -7,13 +7,21 @@
 struct ErrorInfo* ERROR_LOGICAL = NULL;
 struct ErrorInfo* ERROR_MEMORY = NULL;
 struct ErrorInfo* ERROR_ARITHMETIC = NULL;
+struct ErrorInfo* ERROR_IO = NULL;
+
+enum ErrorCode {
+    CODE_LOGICAL = 1,
+    CODE_MEMORY = 2,
+    CODE_ARITHMETIC = 3,
+    CODE_IO = 4
+};
 
 struct ErrorInfo* getLogicalError()
 {
 	if (!ERROR_LOGICAL)
 	{
 		ERROR_LOGICAL = malloc(sizeof(struct ErrorInfo));
-		ERROR_LOGICAL->code = 1;
+		ERROR_LOGICAL->code = CODE_LOGICAL;
 		ERROR_LOGICAL->message = strdup("логическая ошибка: ");
 		ERROR_LOGICAL->innerError = NULL;
 	}
@@ -25,7 +33,7 @@ struct ErrorInfo* getMemoryError()
 	if (!ERROR_MEMORY)
 	{
 		ERROR_MEMORY = malloc(sizeof(struct ErrorInfo));
-		ERROR_MEMORY->code = 2;
+		ERROR_MEMORY->code = CODE_MEMORY;
 		ERROR_MEMORY->message = strdup("ошибка памяти: ");
 		ERROR_MEMORY->innerError = NULL;
 	}
@@ -37,11 +45,23 @@ struct ErrorInfo* getArithmeticError()
 	if (!ERROR_ARITHMETIC)
 	{
 		ERROR_ARITHMETIC = malloc(sizeof(struct ErrorInfo));
-		ERROR_ARITHMETIC->code = 3;
+		ERROR_ARITHMETIC->code = CODE_ARITHMETIC;
 		ERROR_ARITHMETIC->message = strdup("арифметическая ошибка: ");
 		ERROR_ARITHMETIC->innerError = NULL;
 	}
 	return ERROR_ARITHMETIC;
+}
+
+struct ErrorInfo* getIOError()
+{
+	if (!ERROR_IO)
+	{
+		ERROR_IO = malloc(sizeof(struct ErrorInfo));
+		ERROR_IO->code = CODE_IO;
+		ERROR_IO->message = strdup("ошибка ввода/вывода: ");
+		ERROR_IO->innerError = NULL;
+	}
+	return ERROR_IO;
 }
 
 void freeErrorInfo()

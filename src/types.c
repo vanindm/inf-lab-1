@@ -1,6 +1,8 @@
-#include <stdlib.h>
 #include <types.h>
 #include <error.h>
+
+#include <stdlib.h>
+#include <stdio.h>
 
 struct FieldInfo* INT_FIELD_INFO = NULL;
 struct FieldInfo* REAL_FIELD_INFO = NULL;
@@ -20,7 +22,7 @@ struct FieldInfo* getRealFieldInfo()
 {
     if (REAL_FIELD_INFO == NULL) {
         REAL_FIELD_INFO = malloc(sizeof(struct FieldInfo));
-        INT_FIELD_INFO->size = sizeof(struct Real);
+        REAL_FIELD_INFO->size = sizeof(struct Real);
     }
     return REAL_FIELD_INFO;
 }
@@ -29,7 +31,7 @@ struct FieldInfo* getComplexFieldInfo()
 {
     if (COMPLEX_FIELD_INFO == NULL) {
         COMPLEX_FIELD_INFO = malloc(sizeof(struct FieldInfo));
-        INT_FIELD_INFO->size = sizeof(struct Complex);
+        COMPLEX_FIELD_INFO->size = sizeof(struct Complex);
     }
     return COMPLEX_FIELD_INFO;
 }
@@ -104,6 +106,26 @@ integer_t* iQuotient(integer_t* a, integer_t* b, error_t** error)
     return new;
 }
 
+integer_t* iRead(error_t** error)
+{
+    integer_t* new = malloc(sizeof(integer_t)); 
+    if (!new)
+    {
+        *error = throwError("невозможно выделить память для integer при вводе из stdin", getMemoryError(), NULL);
+        return NULL;
+    }
+    scanf("%d", &new->value);
+    return new;
+}
+
+void iWrite(integer_t* a, error_t** error)
+{
+    if(printf("%d", a->value) < 0)
+    {
+        *error = throwError("ошибка при выводе integer_t", getIOError(), NULL);
+    }
+}
+
 real_t* real(double value, error_t** error)
 {
     real_t* new = malloc(sizeof(real_t));
@@ -162,6 +184,26 @@ real_t* rQuotient(real_t* a, real_t* b, error_t** error)
     }
     new->value = a->value / b->value;
     return new;
+}
+
+real_t* rRead(error_t** error)
+{
+    real_t* new = malloc(sizeof(real_t)); 
+    if (!new)
+    {
+        *error = throwError("невозможно выделить память для real при вводе из stdin", getMemoryError(), NULL);
+        return NULL;
+    }
+    scanf("%lf", &new->value);
+    return new;
+}
+
+void rWrite(real_t* a, error_t** error)
+{
+    if(printf("%lf", a->value) < 0)
+    {
+        *error = throwError("ошибка при выводе real_t", getIOError(), NULL);
+    }
 }
 
 complex_t* complex(double Re, double Im, error_t** error)
@@ -232,6 +274,26 @@ complex_t* cQuotient(complex_t* a, complex_t* b, error_t** error)
     return new;
 }
 
+complex_t* cRead(error_t** error)
+{
+    complex_t* new = malloc(sizeof(complex_t)); 
+    if (!new)
+    {
+        *error = throwError("невозможно выделить память для complex_t при вводе из stdin", getMemoryError(), NULL);
+        return NULL;
+    }
+    scanf("%lf %lf", &new->Re, &new->Im);
+    return new;
+}
+
+void cWrite(complex_t* a, error_t** error)
+{
+    if(printf("%lf %lf", a->Re, a->Im) < 0)
+    {
+        *error = throwError("ошибка при выводе complex_t", getIOError(), NULL);
+    }
+}
+
 void* newZero(struct FieldInfo* type, error_t** error)
 {
     void* new = malloc(type->size);
@@ -297,4 +359,28 @@ void* quotient(struct FieldInfo* type, void* a, void* b, error_t** error)
         new = (void*)cQuotient((complex_t*)a, (complex_t*)b, error);
     }
     return new;
+}
+
+void* read(struct FieldInfo* type, error_t** error)
+{
+    void* new;
+    if (type == getIntegerFieldInfo()) {
+        new = (void*)iRead(error);
+    } else if (type == getRealFieldInfo()) {
+        new = (void*)rRead(error);
+    } else if (type == getComplexFieldInfo()) {
+        new = (void*)cRead(error);
+    }
+    return new;
+}
+
+void write(struct FieldInfo* type, void* a, error_t** error)
+{
+    if (type == getIntegerFieldInfo()) {
+        iWrite((integer_t *)a, error);
+    } else if (type == getRealFieldInfo()) {
+        rWrite((real_t *)a, error);
+    } else if (type == getComplexFieldInfo()) {
+        cWrite((complex_t *)a, error);
+    }
 }

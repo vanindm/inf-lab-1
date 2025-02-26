@@ -13,6 +13,7 @@ void freeErrorInfo();
 struct ErrorInfo* getLogicalError();
 struct ErrorInfo* getMemoryError();
 struct ErrorInfo* getArithmeticError();
+struct ErrorInfo* getIOError();
 
 void freeError(error_t* error);
 error_t* _throwError(char* message, error_t* base);
