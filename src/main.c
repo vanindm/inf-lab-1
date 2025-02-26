@@ -75,6 +75,103 @@ void testTransposition()
 
 void testSum()
 {
+    unsigned int n1 = 0, m1 = 0;
+    error_t* error = NULL;
+    if (!s)
+        printf("Введите размеры MxN первой матрицы: ");
+    scanf("%ud", &m1);
+    scanf("%ud", &n1);
+    void* data1 = malloc(n1 * m1 * type->size);
+    if (!s)
+        printf("Введите первую матрицу (через пробел): \n");
+    for (unsigned int i = 0; i < n1 * m1; ++i)
+    {
+        void* new = readType(type, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        copyType(type, (void *)((char *) data1 + i * type->size), new, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        free(new);
+    }
+    matrix_t* mat1 = matrix(m1, n1, type, data1, &error);
+    if (error)
+    {
+        displayError(error);
+        freeError(error);
+        exit(error->code);
+    }
+
+    unsigned int n2 = 0, m2 = 0;
+    if (!s)
+        printf("Введите размеры MxN первой матрицы: ");
+    scanf("%ud", &m2);
+    scanf("%ud", &n2);
+    void* data2 = malloc(n2 * m2 * type->size);
+    if (!s)
+        printf("Введите первую матрицу (через пробел): \n");
+    for (unsigned int i = 0; i < n2 * m2; ++i)
+    {
+        void* new = readType(type, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        copyType(type, (void *)((char *) data2 + i * type->size), new, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        free(new);
+    }
+    matrix_t* mat2 = matrix(m2, n2, type, data2, &error);
+    if (error)
+    {
+        displayError(error);
+        freeError(error);
+        exit(error->code);
+    }
+
+    matrix_t* matS = matrixSum(mat1, mat2, &error);
+    if (error)
+    {
+        displayError(error);
+        freeError(error);
+        exit(error->code);
+    }
+    for (unsigned int i = 0; i < matS->m; ++i)
+    {
+        for (unsigned int j = 0; j < matS->n; ++j)
+        {
+            writeType(type, matrixGetElement(matS, i, j, &error), &error);
+            if (error)
+            {
+                displayError(error);
+                freeError(error);
+                exit(error->code);
+            }
+            printf(" ");
+        }
+        printf("\n");
+    }
+
+    free(data1);
+    free(data2);
+    matrixFree(mat1);
+    matrixFree(mat2);
+    matrixFree(matS);
 
 }
 
@@ -90,12 +187,9 @@ void testLinearCombination()
 
 int main(int argc, char **argv)
 {
-	int t = 0;
-	int o = 0;
 	char *typeArg = NULL;
 	char *operationArg = NULL;
 	int c;
-	int opterr = 0;
 	while((c = getopt(argc, argv, "t:o:s")) != -1)
 	{
 		switch(c)

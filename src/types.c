@@ -283,13 +283,13 @@ complex_t* cRead(error_t** error)
         *error = throwError("невозможно выделить память для complex_t при вводе из stdin", getMemoryError(), NULL);
         return NULL;
     }
-    scanf("%lf %lf", &new->Re, &new->Im);
+    scanf("%lf,%lf", &new->Re, &new->Im);
     return new;
 }
 
 void cWrite(complex_t* a, error_t** error)
 {
-    if(printf("%lf %lf", a->Re, a->Im) < 0)
+    if(printf("%lf,%lf", a->Re, a->Im) < 0)
     {
         *error = throwError("ошибка при выводе complex_t", getIOError(), NULL);
     }
