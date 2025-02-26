@@ -117,7 +117,7 @@ void testSum()
     scanf("%ud", &n2);
     void* data2 = malloc(n2 * m2 * type->size);
     if (!s)
-        printf("Введите первую матрицу (через пробел): \n");
+        printf("Введите вторую матрицу (через пробел): \n");
     for (unsigned int i = 0; i < n2 * m2; ++i)
     {
         void* new = readType(type, &error);
@@ -176,12 +176,192 @@ void testSum()
 
 void testProduct()
 {
+    unsigned int n1 = 0, m1 = 0;
+    error_t* error = NULL;
+    if (!s)
+        printf("Введите размеры MxN первой матрицы: ");
+    scanf("%ud", &m1);
+    scanf("%ud", &n1);
+    void* data1 = malloc(n1 * m1 * type->size);
+    if (!s)
+        printf("Введите первую матрицу (через пробел): \n");
+    for (unsigned int i = 0; i < n1 * m1; ++i)
+    {
+        void* new = readType(type, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        copyType(type, (void *)((char *) data1 + i * type->size), new, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        free(new);
+    }
+    matrix_t* mat1 = matrix(m1, n1, type, data1, &error);
+    if (error)
+    {
+        displayError(error);
+        freeError(error);
+        exit(error->code);
+    }
+
+    unsigned int n2 = 0, m2 = 0;
+    if (!s)
+        printf("Введите размеры MxN первой матрицы: ");
+    scanf("%ud", &m2);
+    scanf("%ud", &n2);
+    void* data2 = malloc(n2 * m2 * type->size);
+    if (!s)
+        printf("Введите вторую матрицу (через пробел): \n");
+    for (unsigned int i = 0; i < n2 * m2; ++i)
+    {
+        void* new = readType(type, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        copyType(type, (void *)((char *) data2 + i * type->size), new, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        free(new);
+    }
+    matrix_t* mat2 = matrix(m2, n2, type, data2, &error);
+    if (error)
+    {
+        displayError(error);
+        freeError(error);
+        exit(error->code);
+    }
+
+    matrix_t* matP = matrixProduct(mat1, mat2, &error);
+    if (error)
+    {
+        displayError(error);
+        freeError(error);
+        exit(error->code);
+    }
+    for (unsigned int i = 0; i < matP->m; ++i)
+    {
+        for (unsigned int j = 0; j < matP->n; ++j)
+        {
+            writeType(type, matrixGetElement(matP, i, j, &error), &error);
+            if (error)
+            {
+                displayError(error);
+                freeError(error);
+                exit(error->code);
+            }
+            printf(" ");
+        }
+        printf("\n");
+    }
+
+    free(data1);
+    free(data2);
+    matrixFree(mat1);
+    matrixFree(mat2);
+    matrixFree(matP);
 
 }
 
 void testLinearCombination()
 {
-
+    unsigned int n = 0, m = 0;
+    error_t* error = NULL;
+    if (!s)
+        printf("Введите размеры MxN матрицы: ");
+    scanf("%ud", &m);
+    scanf("%ud", &n);
+    void* data = malloc(n * m * type->size);
+    if (!s)
+        printf("Введите матрицу (через пробел): \n");
+    for (unsigned int i = 0; i < n * m; ++i)
+    {
+        void* new = readType(type, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        copyType(type, (void *)((char *) data + i * type->size), new, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        free(new);
+    }
+    matrix_t* mat = matrix(m, n, type, data, &error);
+    if (error)
+    {
+        displayError(error);
+        freeError(error);
+        exit(error->code);
+    }
+    unsigned int row = 0;
+    if (!s)
+        printf("Введите номер строки, к которой прибавлять линейную комбинацию: ");
+    scanf("%ud", &row);
+    if (!s)
+        printf("Введите коэффиценты (через пробел): ");
+    void* alphas = malloc(mat->m - 1 * type->size);
+    for (unsigned int i = 0; i < mat->m - 1; ++i)
+    {
+        void* new = readType(type, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        copyType(type, (void *)((char*) alphas + i * type->size), new, &error);
+        if (error)
+        {
+            displayError(error);
+            freeError(error);
+            exit(error->code);
+        }
+        free(new);
+    }
+    matrix_t* matL = matrixLinearCombination(type, mat, row, alphas, &error);
+    if (error)
+    {
+        displayError(error);
+        freeError(error);
+        exit(error->code);
+    }
+    for (unsigned int i = 0; i < matL->m; ++i)
+    {
+        for (unsigned int j = 0; j < matL->n; ++j)
+        {
+            writeType(type, matrixGetElement(matL, i, j, &error), &error);
+            if (error)
+            {
+                displayError(error);
+                freeError(error);
+                exit(error->code);
+            }
+            printf(" ");
+        }
+        printf("\n");
+    }
+    free(data);
+    matrixFree(mat);
+    matrixFree(matL);
 }
 
 int main(int argc, char **argv)
@@ -239,7 +419,7 @@ int main(int argc, char **argv)
         case 's':
             testSum();
             break;
-        case 'm':
+        case 'p':
             testProduct();
             break;
         case 't':
@@ -249,7 +429,7 @@ int main(int argc, char **argv)
             testLinearCombination();
             break;
         default:
-            fprintf(stderr, "Указана неверная операция! (s/m/t/l)\n");
+            fprintf(stderr, "Указана неверная операция! (s/p/t/l)\n");
             return -1;
     }
     freeErrorInfo();

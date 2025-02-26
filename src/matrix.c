@@ -141,7 +141,7 @@ matrix_t* matrixProduct(matrix_t* a, matrix_t* b, error_t** error)
 {
 	if (a->n != b->m)
 	{
-        *error = throwError("при умножении matrix_t для размеров данных матриц операция умножения не имеет смысла", getLogicalError(), NULL);
+        *error = throwError("при умножении matrix_t для размеров этих матриц операция умножения не имеет смысла", getLogicalError(), NULL);
         return NULL;
 	}
     if (a->type != b->type) {
