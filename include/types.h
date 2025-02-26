@@ -24,6 +24,7 @@ void* product(struct FieldInfo* type, void* a, void* b, error_t** error);
 void* quotient(struct FieldInfo* type, void* a, void* b, error_t** error);
 void* readType(struct FieldInfo* type, error_t** error);
 void  writeType(struct FieldInfo* type, void* a, error_t** error);
+void* copyType(struct FieldInfo* type, void* dst, void* src, error_t** error);
 
 typedef struct Integer {
     int value;

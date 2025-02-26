@@ -81,7 +81,7 @@ void* matrixGetElement(matrix_t* a, unsigned int i, unsigned int j, error_t** er
 
 void* matrixSetElement(matrix_t* a, unsigned int i, unsigned int j, void* new_value, error_t** error)
 {
-    if (i < 0 || i >= a->m || j < 0 || j >= a->n)
+    if (i >= a->m || j >= a->n)
     {
         *error = throwError("выход за границы matrix_t.data при попытке присваивания элемента", getLogicalError(), NULL);
         return NULL;

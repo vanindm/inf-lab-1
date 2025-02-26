@@ -2,6 +2,7 @@
 #include <error.h>
 
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 
 struct FieldInfo* INT_FIELD_INFO = NULL;
@@ -383,4 +384,15 @@ void writeType(struct FieldInfo* type, void* a, error_t** error)
     } else if (type == getComplexFieldInfo()) {
         cWrite((complex_t *)a, error);
     }
+}
+
+void* copyType(struct FieldInfo* type, void* dst, void* src, error_t** error)
+{
+    void* new = memcpy(dst, src, type->size);
+    if (!new)
+    {
+        *error = throwError("невозможно скопировать абстрактный тип", getMemoryError(), NULL);
+        return NULL;
+    }
+    return new;
 }
